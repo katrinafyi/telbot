@@ -8,7 +8,7 @@ const { Response, fetch, addEventListener } = self;
 
 type Env = { [key: string]: string };
 
-import {eightball} from './8ball.js';
+import { eightball } from './8ball.js';
 
 
 export default {
@@ -18,12 +18,7 @@ export default {
     console.assert(key);
     const telegram_api = `https://api.telegram.org/bot${key}`;
 
-    /**
-     * rawHtmlResponse returns HTML inputted directly
-     * into the worker script
-     * @param {string} html
-     */
-    function rawHtmlResponse(html: string) {
+    function rawHtmlResponse(html: string): WorkerResponse {
       return new Response(html, {
         headers: { "content-type": "text/html;charset=UTF-8", },
       });
@@ -38,7 +33,7 @@ export default {
     }
 
     async function sendReply(message: any, text: string) {
-      await fetch(telegram_api + '/sendMessage', {
+      const resp = await fetch(telegram_api + '/sendMessage', {
         method: 'POST',
         headers: {
           'Accept': 'application/json',
@@ -49,16 +44,33 @@ export default {
           text: text,
           reply_parameters: {
             message_id: message.message_id,
-          }
+          },
         }),
       });
+      if (!resp.ok) {
+        console.error('telegram returned error', await resp.json());
+      }
     }
-
     async function handleCommand(message: any, cmd: string) {
-      if (cmd === '/8ball' || cmd === '/ball') {
-        return sendReply(message, eightball.getAnswer());
-      } else {
-        return sendReply(message, `i don't know how to ${cmd} :(`);
+      const commands = `
+8ball - shake the magic 8 ball
+ball - shake the magic 8 ball
+approval - request purchase approval
+approve - request purchase approval
+purchase - request purchase approval
+`;
+      const { choice, ballAnswers, purchaseAnswersPos, purchaseAnswersNeg } = eightball;
+      switch (cmd) {
+        case '/8ball':
+        case '/ball':
+          return sendReply(message, choice(ballAnswers));
+        case '/approval':
+        case '/approve':
+        case '/purchase':
+          return sendReply(message, choice([...purchaseAnswersNeg, ...purchaseAnswersPos]));
+        default:
+          return sendReply(message,
+            `i don\u2019t know how to ${cmd.replace('/', '/\u200b')} :(`);
       }
     }
 
@@ -76,19 +88,24 @@ export default {
       }
 
       const reqBody = JSON.parse(await readRequestBody(request));
-      console.log('message keys', Object.keys(reqBody));
+      console.log('message keys ' + Object.keys(reqBody));
       const { message } = reqBody;
       if (message) {
         const { text, entities } = message;
         const cmds = (entities ?? []).filter((x: any) => x.type === 'bot_command');
         const cmdtexts: Array<string> = cmds.map((x: any) => text.substring(x.offset, x.offset + x.length));
+        console.log('commands:', cmdtexts);
         await Promise.all(cmdtexts.map(handleCommand.bind(this, message)));
         return new Response('ok');
       } else {
         return new Response('unhandled');
       }
     } else {
-      return new Response("The request was a " + request.method);
+      return rawHtmlResponse(`
+        <style>* { font-family: sans-serif; }</style>
+        <h2>telbot</h2>
+        <a href="${URL.parse(request.url)!.origin}/register">register bot</a>
+      `);
     }
   },
 } satisfies ExportedHandler<Env>;

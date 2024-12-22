@@ -5,10 +5,25 @@
 </head>
 <html>
   <body>
-    <div>
-      <label for="pass">Token</label>
-      <input type="password" id="pass" name="password" />
-    </div>
+    <form id="form" action=".">
+      <div>
+        <label for="pass">Token</label>
+        <input type="password" id="pass" required />
+      </div>
+      <div>
+        <label for="formurl">Webhook URL</label>
+        <input type="url" id="formurl" name="url" pattern="https://.*" readonly required />
+      </div>
+      <div>
+        <label for="secret">Secret token</label>
+        <input type="text" id="secret" name="secret_token" />
+      </div>
+      <div>
+        <label for="secret">Allowed updates</label>
+        <input type="text" id="secret" name="allowed_updates" />
+      </div>
+      <input type="submit" value="Register webhook" />
+    </form>
     <script>
       window.pass.oninput = () => {
         const key = window.pass.value.trim();
@@ -17,21 +32,7 @@
         window.formurl.value = window.location.origin;
       };
     </script>
-    <form id="form" action=".">
-      <div>
-        <label for="formurl">Webhook URL</label>
-        <input type="text" id="formurl" name="url" readonly />
-      </div>
-      <div>
-        <label for="secret">Secret token</label>
-        <input type="text" id="secret" name="secret_token" />
-      </div>
-      <div>
-        <label for="secret">Allowed updates</label>
-        <input type="text" id="secret" name="secret_token" />
-      </div>
-      <input type="submit" value="Register webhook" />
-    </form>
+
     <form id="form2" action=".">
       <input type="submit" value="Delete webhook" />
     </form>
