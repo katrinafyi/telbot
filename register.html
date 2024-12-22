@@ -1,0 +1,39 @@
+<!doctype html>
+<head>
+  <script src="https://unpkg.com/htmx.org@1.9.12/dist/htmx.min.js" integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/htmx.org@1.9.12/dist/ext/json-enc.js" integrity="sha384-nRnAvEUI7N/XvvowiMiq7oEI04gOXMCqD3Bidvedw+YNbj7zTQACPlRI3Jt3vYM4" crossorigin="anonymous"></script>
+</head>
+<html>
+  <body>
+    <div>
+      <label for="pass">Token</label>
+      <input type="password" id="pass" name="password" />
+    </div>
+    <script>
+      window.pass.oninput = () => {
+        const key = window.pass.value.trim();
+        window.form.action = `https://api.telegram.org/bot${key}/setWebhook`;
+        window.form2.action = `https://api.telegram.org/bot${key}/deleteWebhook`;
+        window.formurl.value = window.location.origin;
+      };
+    </script>
+    <form id="form" action=".">
+      <div>
+        <label for="formurl">Webhook URL</label>
+        <input type="text" id="formurl" name="url" readonly />
+      </div>
+      <div>
+        <label for="secret">Secret token</label>
+        <input type="text" id="secret" name="secret_token" />
+      </div>
+      <div>
+        <label for="secret">Allowed updates</label>
+        <input type="text" id="secret" name="secret_token" />
+      </div>
+      <input type="submit" value="Register webhook" />
+    </form>
+    <form id="form2" action=".">
+      <input type="submit" value="Delete webhook" />
+    </form>
+  </body>
+</html>

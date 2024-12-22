@@ -4,7 +4,7 @@
     "module": "esnext",
     "lib": ["esnext"],
     "moduleResolution": "node",
-    "types": [],
+    "types": ["node"],
     "strict": true
   }
 }
