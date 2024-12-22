@@ -58,12 +58,14 @@ ball - shake the magic 8 ball
 approval - request purchase approval
 approve - request purchase approval
 purchase - request purchase approval
+buy - request purchase approval
 `;
       const { choice, ballAnswers, purchaseAnswersPos, purchaseAnswersNeg } = eightball;
       switch (cmd) {
         case '/8ball':
         case '/ball':
           return sendReply(message, choice(ballAnswers));
+        case '/buy':
         case '/approval':
         case '/approve':
         case '/purchase':
