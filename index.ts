@@ -103,7 +103,7 @@ buy - request purchase approval
 
       const thinking = await sendReply(message, choice(thinkingAnswers));
 
-      const delay = 1500+2500*Math.random();
+      const delay = 1800+700*Math.random();
       await sleep(delay);
 
       let reply = `i don\u2019t know how to ${cmd.replace('/', '/\u200b')} :(`;
