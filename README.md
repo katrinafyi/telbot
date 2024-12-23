@@ -13,7 +13,7 @@ Register a new bot and obtain its bot token.
 
 Create a `.dev.vars` file to store local secrets:
 ```bash
-cp .dev.vars template.dev.vars
+cp template.dev.vars .dev.vars
 ```
 Fill in the bot token and set the "secret" to a new string.
 The secret is used to authenticate notifications to your webhook.
