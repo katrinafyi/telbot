@@ -49,7 +49,7 @@ export default {
     }
 
     async function sendReply(message: any, text: string, editMessage: number | null = null) {
-      const endpoint = editMessage === null ? '/sendMessage' : '/editMessageText';
+      const endpoint = editMessage == null ? '/sendMessage' : '/editMessageText';
       const payload: any = {
         chat_id: message.chat.id,
         text: text,
@@ -101,9 +101,10 @@ buy - request purchase approval
         return;
       }
 
-      const thinking = await sendReply(message, choice(thinkingAnswers));
+      const thinking: any = {};
+      // const thinking = await sendReply(message, choice(thinkingAnswers));
 
-      const delay = 1800+700*Math.random();
+      const delay = 1200+700*Math.random();
       await sleep(delay);
 
       let reply = `i don\u2019t know how to ${cmd.replace('/', '/\u200b')} :(`;
