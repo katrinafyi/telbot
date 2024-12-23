@@ -45,7 +45,7 @@ export default {
     }
 
     async function getMe(): Promise<any> {
-      return (await fetch(telegram_api + '/getMe')).json();
+      return (await (await fetch(telegram_api + '/getMe')).json() as any).result;
     }
 
     async function sendReply(message: any, text: string, editMessage: number | null = null) {
