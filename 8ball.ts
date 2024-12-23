@@ -5,6 +5,12 @@
  */
 
 export const eightball = {
+  thinkingAnswers: [
+    'Hmmm...',
+    'Thinking...',
+    'Let\'s see...',
+    'Wait...',
+  ],
   ballAnswers: [
     'It is certain.',
     'It is decidedly so.',
